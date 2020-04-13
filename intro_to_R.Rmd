@@ -1,16 +1,17 @@
 ---
 title: "An Introduction to R"
-author: "Ed D. J. Berry"
-date: "9th January 2017"
+author: "Adam P Cribbs (Slides modified from Edd J Berry (Uni of Leeds))"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   ioslides_presentation:
-    logo: logo.png
     css: styles.css
     widescreen: true
     smaller: false
     fig_width: 4
     fig_height: 3
 ---
+
+<!-- This presentation was forked and adapted from  Edd J Berry -->
 
 ```{r setup, include = F}
 library(knitr)
@@ -31,26 +32,27 @@ knitr::opts_chunk$set(echo = FALSE, fig.align = "center")
 + Recommended resources
 
 ## Why now? | Efficiency
-+ Point-and-click software just isn't time efficient
-+ Automating tasks will pay off within the time frame of a PhD and thereafter
++ Generating powerpoint presentations is time consuming
++ Writing your CV out by hand takes ages
++ Automating tasks pays off in the long run
++ Spending some time to get things set up is key to efficiency
 
 ## Why now? | Reproducibility
 + There is an increasing expectation that materials, data, and analysis details are provided alongside research to ensure it is reproducible
     + This is easier when things are script based 
 + [Peer Reviewers' Openness Initiative](https://opennessinitiative.org/)
++ Having a detailed log of all of your analysis is important
++ When integrated with git this improves reproducibility and accecibility of science
 
 ## Why R? | Jobs
-+ R is increasingly taught in Psychology departments, including at undergraduate level
-+ Useful skill for jobs outside academia 
++ R is increasingly used in many academic labs
++ Useful skill for jobs outside academia - London R event
 + Makes you a more efficient academic 
 
 ## Why R? | Pretty graphs
 
 <div align = "center", class="columns-2">
-  <img src="figures/eg1.png" height=490>
-
-  <img src="figures/eg2.png" height=470>
-  
+  <img src="figures/plot1.png" height=490>
 </div>   
 
 ## Why R? | Range of packages
@@ -62,21 +64,22 @@ knitr::opts_chunk$set(echo = FALSE, fig.align = "center")
 + Interactive HTML applications 
 
 
-## Why R? | Reproducibility... again
+## Why R? | Reproducibility is in-built
 + R projects
 + R Markdown
++ R shiny
 
 ## Why R
 + It's free
 + Big community 
-+ R has the [happiest commenters](https://hackernoon.com/which-programming-languages-have-the-happiest-and-angriest-commenters-ebe91b3852ed#.fpgwgsb03)
++ R helpers are [lovely](https://hackernoon.com/which-programming-languages-have-the-happiest-and-angriest-commenters-ebe91b3852ed#.fpgwgsb03)
 
 # Recommended packages 
 
 ## General comments
-+ Given the age of R there are many ways to complete a task
++ There are many ways to complete a coding task
 + Most data manipulation tasks can be done with 'base R'
-    + However, this often isn't the most efficient or readable approach 
+    + However, this often isn't efficient (most of the time it is though) and readbility can often be a major problem! 
 
 ## tidyverse
 + A collection of packages by Hadley Wickham for:
@@ -86,7 +89,7 @@ knitr::opts_chunk$set(echo = FALSE, fig.align = "center")
     + Importing data (readr)
     + Functional programming (purrr)
         + See [here](https://blog.rstudio.org/2016/09/15/tidyverse-1-0-0/) for a full list of the included packages
-+ These packages are all designed to work nicely together
++ These packages are based on the tidy data philosophy
 + More readable by people than most R code
 
 ## Installing tidyverse
@@ -227,71 +230,6 @@ sum_stats <- df1 %>%
 sum_stats
 ```
 
-## purrr | overview
-+ `purrr` is a package for 'functional programming'
-+ The functions you're likely to use most are the `map()` functions
-    + Apply a function to a list, vector or dataframe
-    + Have versions where you specify the class of the object you're expecting back
-        + 'Safer' than the `apply` family
-            + Either work or break with an informative error message
-+ Lots of other functions that are useful for writing your own functions
-+ Cool purrr tutorial [here](https://jennybc.github.io/purrr-tutorial/)
-
-## purrr | example
-
-```{r eval = F, echo = T}
-list <- paste("data/", list.files("data"), sep = "")
-
-df <- map_df(list, read_csv)
-
-```
-
-## tidyr | Overview
-+ Functions for tidying data
-+ The thing to use for moving between long and wide data
-+ E.g. suppose we have the wide data from before
-
-```{r}
-head(df1 %>% filter(stage == "test"))
-```
-
-## tidyr | Example
-
-```{r echo = T}
-df1_long <- df1 %>%
-  gather(condition, score, cond1:cond2) %>%
-  arrange(id)
-  
-```
-
-```{r}
-head(df1_long)
-``` 
-
-## Recommended packages | broom
-+ For cleaning up the outputs of modelling functions [(vignette)](ftp://cran.r-project.org/pub/R/web/packages/broom/vignettes/broom.html)
-+ Work very well with dplyr [(vignette)](ftp://cran.r-project.org/pub/R/web/packages/broom/vignettes/broom_and_dplyr.html)
-
-```{r}
-
-df2 <- data_frame(id = 1:60, 
-                  year = rep(c("five", "two"), each = 30), 
-                  memory = rnorm(60), 
-                  attention = rnorm(60), 
-                  attainment = memory * 1 + attention * 0.8 + rnorm(60))
-
-head(df2, 8)
-```
-
-## Recommended packages | broom example (adapted from vignette)
-
-```{r, echo = T}
-df2 %>%
-  group_by(year) %>%
-  do(tidy(lm(attainment ~ memory + attention, data = .)))
-
-```
-
 ## Recommended packages | rmarkdown
 + `rmarkdown` provides a range of tools for creating dynamic documents in R [(see this intro)](http://rmarkdown.rstudio.com/lesson-1.html) 
 + Can be used to create:
@@ -318,7 +256,7 @@ df2 %>%
 ## General tips | R Studio
 
 + Lots of useful stuff for R Markdown 
-+ Generally just nice 
++ Great IDU that is easy to use
 + Download here: https://www.rstudio.com/products/rstudio/download/
 + Some [tips](https://www.r-bloggers.com/rstudio-ide-easy-tricks-you-mightve-missed/) for using R Studio
 
@@ -377,7 +315,7 @@ source("../scripts/data-processing.R")
 # Recommended resources
 
 ## Recommended resources | Datacamp
-+ This is how I did most of my learning
+
 + They have loads of great courses, particularly:
     + [Introduction to R](https://www.datacamp.com/courses/free-introduction-to-r) & [Intermediate R](https://www.datacamp.com/courses/intermediate-r)
     + [Data Manipulation in R with dplyr](https://www.datacamp.com/courses/dplyr-data-manipulation-r-tutorial), [Joining Data in R with dplyr](https://www.datacamp.com/courses/joining-data-in-r-with-dplyr) & [Cleaning Data in R](https://www.datacamp.com/courses/cleaning-data-in-r)
@@ -434,7 +372,6 @@ browseVignettes(package = "tidyverse")
 + [Discovering Statistics Using R](https://www.amazon.co.uk/Discovering-Statistics-Using-Andy-Field/dp/1446200469/ref=sr_1_4?s=books&ie=UTF8&qid=1483428752&sr=1-4&keywords=andy+field) by Andy Field
     + Published in 2012 so the stuff on data manipulation, in particular, is out of date
     
-## Where to get the code for these slides
+## Where to find example to generate your own Rmarkdown slides
 + [https://github.com/eddjberry/intro-to-R-talks](https://github.com/eddjberry/intro-to-R-talks)
 + See the file intro-to-R.Rmd
-    + There is also a knitted HTML version of the slides on GitHub

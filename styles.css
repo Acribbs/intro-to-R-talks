@@ -37,11 +37,11 @@ slides > slide.title-slide hgroup p {
 }
 
 h1, h2, h3 {
-  color: #490092 !important;
+  color: #000000 !important;
 }
 
 slides > slide.dark {
-  background: #340068 !important;
+  background: #696969 !important;
 }
 
 slides > slide.dark hgroup h2 {
